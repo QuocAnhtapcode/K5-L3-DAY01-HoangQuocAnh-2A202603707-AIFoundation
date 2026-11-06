@@ -1,0 +1,203 @@
+{
+ "seed": 8387,
+ "predictions": {
+  "ml_f1": {
+   "text": "F1~0.92, ở dạng bài lọc spam thì presion được ưu tiên hơn recall vì để mất tin nhắn quan trọng thường nghiêm trọng hơn để lọt tin nhắn spam",
+   "time": "16:00:11"
+  },
+  "ml_lr": {
+   "text": "Learning rate là bước nhảy của mô hình khi cố gắng học các đặc trưng. lr=0.001 là khá nhỏ, mô hình sẽ học chậm và chi tiết. Đồ thị loss của mô hình khi để lr=0.0001 sẽ giảm chậm nhưng dần đều. Với lr=50, mô hình có thể sẽ nhảy các bước dài khiến mô hình nhanh chónghoàn thành training nhưng kết quả có thể sẽ không tốt vì chưa kịp học được các đặc trưng.Đồ thị loss khi này sẽ biến động mạnh, khi tăng vọt, khi giảm sâu.",
+   "time": "16:00:17"
+  },
+  "dl_curve": {
+   "text": "Check",
+   "time": "16:00:38"
+  },
+  "dl_relu": {
+   "text": "Khi bỏ hàm kích hoạt ReLU, mạng 2 lớp tuyến tính liên tiếp (Linear -> Linear) sẽ chỉ đơn thuần thực hiện các phép nhân ma trận liên tục. Về mặt toán học, tích của hai ma trận tuyến tính vẫn là một phép biến đổi tuyến tính duy nhất. Do đó, mô hình MLP lúc này sẽ hoàn toàn tương đương với Logistic Regression ở Phần 1. F1 khả năng sẽ giảm một chút về mức gần với Logistic Regression hơn",
+   "time": "16:00:46"
+  },
+  "emb_search": {
+   "text": "Model vẫn sẽ hiểu nghĩa và đánh dấu là spam",
+   "time": "16:01:15"
+  },
+  "emb_tricky": {
+   "text": "Mô hình 3b. Encoder + LogReg sẽ đoán đúng nhiều hơn",
+   "time": "16:01:21"
+  },
+  "llm_models": {
+   "text": "(1) gpt-6.1-terra sẽ có điểm F1 cao hơn gpt-6-luna.(2) gpt-6.1-terra có giá token đắt gấp 10 lần gpt-6-luna.(3) LLM sẽ chiến thắng nhưng không thắng quá nhiều vì điểm của 3b (embedding) đã rất cao rồi.",
+   "time": "16:01:26"
+  },
+  "llm_fewshot": {
+   "text": "F1 tăng, chi phí tăng gấp 3 lần",
+   "time": "16:02:59"
+  },
+  "tradeoff": {
+   "text": "BoW + LogReg nằm trên đường Pareto. Các model LLM nằm bên phải vạch SLA 50ms",
+   "time": "16:03:33"
+  },
+  "hard_eval": {
+   "text": "BoW còn khoảng 70%. Emb giảm xuống 80%. LLM vẫn trên 90% do đã được training kỹ. BoW: né từ khóa, viết sai hoặc chèn ký tự vì làm mất các từ đã học. LLM: prompt injection vì dễ bị lệnh trong tin nhắn dẫn lệch khỏi nhiệm vụ phân loại.",
+   "time": "16:03:34"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": true,
+  "4.1 + 4.4 call_openai / llm_classify_batch": true,
+  "tính tay: baseline_accuracy": true,
+  "tính tay: sigmoid_0": true,
+  "tính tay: f1_example": true,
+  "tính tay: cosine_example": true,
+  "tính tay: llm_cost_per_day": true
+ },
+ "experiments": [
+  {
+   "key": "ml_f1",
+   "time": "16:00:11"
+  },
+  {
+   "key": "ml_lr",
+   "time": "16:00:17"
+  },
+  {
+   "key": "dl_curve",
+   "time": "16:00:38"
+  },
+  {
+   "key": "dl_relu",
+   "time": "16:00:46"
+  },
+  {
+   "key": "emb_search",
+   "time": "16:01:15"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "16:01:21"
+  },
+  {
+   "key": "llm_models",
+   "time": "16:01:28"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "16:02:59"
+  },
+  {
+   "key": "tradeoff",
+   "time": "16:03:34"
+  },
+  {
+   "key": "hard_eval",
+   "time": "16:03:34"
+  }
+ ],
+ "challenge": 5,
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.9870967741935484,
+   "precision": 1.0,
+   "recall": 0.8924731182795699,
+   "f1": 0.9431818181818181,
+   "f1_SUB": 1.0,
+   "train_s": 5.072634576999917,
+   "msg_per_s": 17759.295685128767,
+   "p50_ms": 0.04832600001236642,
+   "p95_ms": 0.07367234993580495,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.9961290322580645,
+   "precision": 1.0,
+   "recall": 0.967741935483871,
+   "f1": 0.9836065573770492,
+   "f1_SUB": 1.0,
+   "train_s": 8.081051179000042,
+   "msg_per_s": 27587.724067932773,
+   "p50_ms": 0.32458299995141715,
+   "p95_ms": 0.4241238999838969,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9806451612903225,
+   "precision": 0.89,
+   "recall": 0.956989247311828,
+   "f1": 0.922279792746114,
+   "f1_SUB": 1.0,
+   "train_s": 1.8551570519999814,
+   "msg_per_s": 304.04211942009204,
+   "p50_ms": 12.813213000015367,
+   "p95_ms": 19.227287600006083,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9883870967741936,
+   "precision": 0.9468085106382979,
+   "recall": 0.956989247311828,
+   "f1": 0.9518716577540107,
+   "f1_SUB": 1.0,
+   "train_s": 2.224340094000013,
+   "msg_per_s": 1274.482819065643,
+   "p50_ms": 6.9232664999958615,
+   "p95_ms": 7.938173050001748,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.9858064516129033,
+   "precision": 0.9361702127659575,
+   "recall": 0.946236559139785,
+   "f1": 0.9411764705882354,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 2.9831394079999427,
+   "msg_per_s": 1600.67568589517,
+   "p50_ms": 6.919075499979499,
+   "p95_ms": 7.7658742000494385,
+   "usd_per_1k": 0.0
+  },
+  "4a. LLM nhỏ zero-shot": {
+   "accuracy": 0.975,
+   "precision": 1.0,
+   "recall": 0.95,
+   "f1": 0.9743589743589743,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 0.0,
+   "msg_per_s": 0.9112256451137082,
+   "p50_ms": 870.0613199999907,
+   "p95_ms": 1806.8716323499814,
+   "usd_per_1k": 0.008896666666666669
+  },
+  "4b. LLM lớn zero-shot": {
+   "accuracy": 0.975,
+   "precision": 1.0,
+   "recall": 0.95,
+   "f1": 0.9743589743589743,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 0.0,
+   "msg_per_s": 0.9373955061062069,
+   "p50_ms": 980.9868715000221,
+   "p95_ms": 1418.1324285499154,
+   "usd_per_1k": 0.08896666666666667
+  },
+  "4c. LLM nhỏ few-shot": {
+   "accuracy": 0.975,
+   "precision": 1.0,
+   "recall": 0.95,
+   "f1": 0.9743589743589743,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 0.0,
+   "msg_per_s": 1.1930315112225918,
+   "p50_ms": 788.8523654999631,
+   "p95_ms": 1201.6346034500827,
+   "usd_per_1k": 0.023296666666666674
+  }
+ }
+}
